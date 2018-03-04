@@ -1,0 +1,4 @@
+{
+    "watch": ["ssr/server","src"],
+    "ext": "js,ts"
+}
