@@ -14,7 +14,8 @@ import rootReducer from '../../../src/reducers';
 import Cookies from 'cookies';
 
 export default function routes( req, res, next ) {
-    
+    webpackIsomorphicTools.refresh();
+
     const branch = matchRoutes(commonRoutes, req.url )
     const context = {};
     const routes  = commonRoutes;
@@ -23,11 +24,14 @@ export default function routes( req, res, next ) {
                                 applyMiddleware(getCookiesMiddleware(new Cookies( req, res))) );
     
 
+    const assets = webpackIsomorphicTools.assets();
+
+    console.log(assets);
     if( branch.length == 0 ) {
         return next();
     }
 
     res.send(renderToString(
-        <Html component={branch[0].route.component} state={store.getState()} store={store}/>
+        <Html component={branch[0].route.component} state={store.getState()} store={store} assets={assets}/>
     ) );
 }

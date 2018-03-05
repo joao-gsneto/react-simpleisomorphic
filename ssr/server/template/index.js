@@ -2,7 +2,27 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux';
 import { renderToString } from 'react-dom/server'
 
+
 class Html extends Component {
+    javascripts() {
+        const js = this.props.assets.javascript || {};
+        const mainJS = js.main || '';
+        const path =
+            (mainJS.length) ? `${mainJS.replace('./dist', '/dist')}` : '/dist/main.js';
+
+            
+        return <script src={path} async></script>;
+
+    }
+
+    styles() {
+
+    }
+
+    metas() {
+
+    }
+
     createComponentFactory() {
         const el = React.createElement(this.props.component, { store: this.props.store });
         return { __html: renderToString( el ) };
@@ -22,8 +42,10 @@ class Html extends Component {
 
                     <body>
 
-                        <div id="content" dangerouslySetInnerHTML={this.createComponentFactory()} />
+                        <div id="app" dangerouslySetInnerHTML={this.createComponentFactory()} />
+                        <div id="content"></div>
 
+                        {this.javascripts()}
                     </body>
                 </html>
             )
